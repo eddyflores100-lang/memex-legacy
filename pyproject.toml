@@ -48,7 +48,7 @@ dependencies = [
 [project.optional-dependencies]
 ollama = []  # no extra deps — Ollama runs locally
 hybrid = ["bm25s>=0.2"]  # BM25 fusion for recall_hybrid; degrades gracefully if absent
-dev = ["pytest", "pytest-asyncio", "httpx", "ruff==0.15.22", "build>=1.2", "anthropic>=0.40"]
+dev = ["pytest", "pytest-asyncio", "httpx", "ruff==0.16.9", "build>=1.2", "anthropic>=0.40"]
 
 [project.scripts]
 memex = "memex.cli:main"
@@ -79,6 +79,13 @@ constraint-dependencies = ["onnxruntime!=1.24.1,!=1.24.2,!=1.24.3"]
 [tool.ruff]
 line-length = 100
 target-version = "py310"
+
+[tool.ruff.lint]
+# Explicit lint contract: pin the rule surface to the ruff 0.15.x default set
+# (E4/E7/E9 + F). ruff 0.16 expanded its default rule selection, which flags
+# ~531 pre-existing violations on this frozen codebase. Pinning the rules keeps
+# the lint gate version-independent so future ruff bumps remain safe.
+select = ["E4", "E7", "E9", "F"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
